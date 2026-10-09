@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+	<flow name="file-readFlow" doc:id="408a5210-e6a4-4a12-b101-6fe437309b0c" >
+		<scheduler doc:name="Scheduler" doc:id="79a63bcc-ced0-4152-b90f-4a64316f3e83" >
+			<scheduling-strategy >
+				<fixed-frequency frequency="30" timeUnit="SECONDS"/>
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="c9ff5b03-24bd-467d-9bd0-ae6191418a1e" message="start"/>
+		<file:read doc:id="591e77a8-bbd8-476c-8498-2be3c62b5e9a" path='C:\Users\prade\OneDrive\Desktop\New folder\input\hellomule.txt'/>
+		<file:write doc:name="Write" doc:id="f76a6b5a-890c-4321-af94-7d20eeab2478" path='"C:\Users\prade\OneDrive\Desktop\New folder\input\hello mule.txt"'/>
+		<ee:transform doc:name="Transform Message" doc:id="283b5e09-8ab0-420b-b7a7-8f7fa06181bf" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="file-readFlow1" doc:id="bd2e3eb1-2678-40fd-85e7-c1351ffa01eb" >
+		<file:listener doc:name="On New or Updated File" doc:id="559cd940-bbca-4665-b475-c910a5a7476d" directory="C:\Users\prade\OneDrive\Desktop\New folder">
+			<scheduling-strategy >
+				<fixed-frequency />
+			</scheduling-strategy>
+		</file:listener>
+		<file:read doc:name="Read" doc:id="da9e3667-fd59-46d2-9159-455142e62ce8" />
+		<file:rename doc:name="Rename" doc:id="8fbea11c-3088-4663-b230-ca9ba8079b52" />
+		<file:move doc:name="Move" doc:id="c9d6e861-2266-4b84-8d94-97f11721d0e5" />
+	</flow>
+</mule>
